@@ -13,16 +13,16 @@ class GripPipeline:
         """
 
         self.__cv_resize_dsize = (0, 0)
-        self.__cv_resize_fx = 0.5
-        self.__cv_resize_fy = 0.5
+        self.__cv_resize_fx = 1
+        self.__cv_resize_fy = 1
         self.__cv_resize_interpolation = cv2.INTER_LINEAR
 
         self.cv_resize_output = None
 
         self.__hsv_threshold_input = self.cv_resize_output
-        self.__hsv_threshold_hue = [79.31654676258992, 105.75757575757576]
-        self.__hsv_threshold_saturation = [0.0, 121.91919191919192]
-        self.__hsv_threshold_value = [245.0, 255.0]
+        self.__hsv_threshold_hue = [78.34532374100719, 122.42424242424242]
+        self.__hsv_threshold_saturation = [82.55395683453237, 255.0]
+        self.__hsv_threshold_value = [157.85971223021585, 255.0]
 
         self.hsv_threshold_output = None
 
@@ -33,16 +33,16 @@ class GripPipeline:
 
         self.__filter_contours_contours = self.find_contours_output
         self.__filter_contours_min_area = 200.0
-        self.__filter_contours_min_perimeter = 0
-        self.__filter_contours_min_width = 0
-        self.__filter_contours_max_width = 1000
-        self.__filter_contours_min_height = 0
-        self.__filter_contours_max_height = 1000
+        self.__filter_contours_min_perimeter = 0.0
+        self.__filter_contours_min_width = 0.0
+        self.__filter_contours_max_width = 1000.0
+        self.__filter_contours_min_height = 0.0
+        self.__filter_contours_max_height = 1000.0
         self.__filter_contours_solidity = [0, 100]
-        self.__filter_contours_max_vertices = 1000000
-        self.__filter_contours_min_vertices = 0
-        self.__filter_contours_min_ratio = 0
-        self.__filter_contours_max_ratio = 1000
+        self.__filter_contours_max_vertices = 1000000.0
+        self.__filter_contours_min_vertices = 0.0
+        self.__filter_contours_min_ratio = 0.0
+        self.__filter_contours_max_ratio = 1000.0
 
         self.filter_contours_output = None
 
@@ -110,7 +110,7 @@ class GripPipeline:
         else:
             mode = cv2.RETR_LIST
         method = cv2.CHAIN_APPROX_SIMPLE
-        im2, contours, hierarchy =cv2.findContours(input, mode=mode, method=method)
+        contours, hierarchy = cv2.findContours(input, mode=mode, method=method)
         return contours
 
     @staticmethod
@@ -157,4 +157,6 @@ class GripPipeline:
                 continue
             output.append(contour)
         return output
+
+
 
