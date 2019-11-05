@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+
+import wpilib
+import math
+import rev
+from navx import AHRS
+
+'''
+class PolarDrive:
+	def Init():
+		self.magnitude = 0
+		self.angle = 0
+	
+	def Resultant(x,y):
+		self.magnitude = (x**2+y**2)**0.5
+		self.angle = atan(y/x)
+	'''
+class MyRobot(wpilib.TimedRobot):
+	'''kP = 0.03
+	kI = 0.00
+	kD = 0.00
+	kF = 0.00
+	kToleranceDegrees = 1.0
+	turnRatio = .1'''
+	def robotInit(self):
+		self.angle = 1
+		self.volt = 1
+		self.position = 1
+		self.x = 1
+		self.y = 1
+		self.magnitude = 1
+		self.angle = 1
+		self.position = 1
+		self.Analog_enc = wpilib.AnalogInput(1)
+		'''Robot initialization function'''
+		self.tolerance= .5 #tolerance for the turn motor
+		# object that handles basic drive operations
+		self.driveMotor = rev.CANSparkMax(1,rev.MotorType.kBrushless)
+		self.turnMotor = rev.CANSparkMax(4,rev.MotorType.kBrushless)
+		self.joystick = wpilib.Joystick(0)
+		
+		
+		self.turnEncoder = rev._impl.CANEncoder(self.turnMotor)
+		self.driveEncoder = rev._impl.CANEncoder(self.driveMotor)
+		
+		self.turnController = rev._impl.CANPIDController(self.turnMotor)
+		self.driveController = rev._impl.CANPIDController(self.driveMotor)
+	def autonomousInit(self):
+		self.turnEncoder.setPosition(0.0)
+		self.driveEncoder.setPosition(0.0)
+	def autonomousPeriodic(self):
+		pass
+	def teleopInit(self):
+		self.turnEncoder.setPosition(0.0)
+		self.driveEncoder.setPosition(0.0)
+	def teleopPeriodic(self):
+		
+		self.x = wpilib.Joystick(1).getX()
+		self.y = wpilib.Joystick(1).getY()
+		
+		self.magnitude = (self.x**2+self.y**2)**0.5
+		if self.x != 0:
+			self.angle = math.atan(self.y/self.x)
+		else:
+			pass
+		self.volt = self.Analog_enc.getValue()
+		if self.volt != 0:
+			self.position = (360/(self.volt))/8.33
+		else:
+			pass
+		print('current position at' + str(self.position))
+		self.driveMotor.set(-1*self.joystick.getY())
+		self.turnMotor.set(self.turnRatio*self.joystick.getZ() + .02)
+		self.driveMotor.set(-1*int(self.magnitude))
+		
+		
+		
+if __name__ == '__main__':
+	wpilib.run(MyRobot)
